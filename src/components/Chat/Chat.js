@@ -8,6 +8,7 @@ import Input from '../Input/Input';
 import Messages from '../Messages/Messages';
 
 let socket;
+let counter = 1;
 
 const Chat = ({ location }) => {
   const [name, setName] = useState('');
@@ -28,6 +29,8 @@ const Chat = ({ location }) => {
 
     });
 
+    counter++;
+
     return () => {
       socket.emit('disconnect');
 
@@ -39,18 +42,22 @@ const Chat = ({ location }) => {
   useEffect(() => {
     socket.on('message', (message) => {
       setMessages([...messages, message]);
+      console.log(messages);
     })
   }, [messages])
 
   const sendMessage = (event) => {
     event.preventDefault();
+    counter++;
 
     if (message) {
       socket.emit('sendMessage', message, () => setMessage(''));
+      console.log('this is the message:' + message);
+      console.log("You were here!");
     }
   }
 
-  console.log(message, messages);
+  console.log(counter, message, messages);
 
   return (
     <div className='outerContainer'>
